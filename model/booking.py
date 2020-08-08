@@ -2,6 +2,8 @@ import json
 
 import faker
 
+from utils.utils import logging as log
+
 
 class BookingData:
     def __init__(
@@ -21,6 +23,7 @@ class BookingData:
         self.bookingdates = _BookingDates(checkin, checkout)
         self.additionalneeds = additionalneeds
 
+    # @log('randomize booking creation')
     @staticmethod
     def random():
         fake = faker.Faker()
@@ -41,7 +44,7 @@ class BookingData:
             additional_needs,
         )
 
-
+    # @log('pars json')
     def object_to_dict(self):
         return json.loads(json.dumps(self, default=lambda o: o.__dict__))
 
@@ -50,3 +53,11 @@ class _BookingDates:
     def __init__(self, checkin, checkout):
         self.checkin = checkin
         self.checkout = checkout
+
+
+class IncorrectBookingData:
+    def __init__(self):
+        self.anyfield = faker.Faker().random
+
+    def object_to_dict(self):
+        return json.loads(json.dumps(self, default=lambda o: o.__dict__))
