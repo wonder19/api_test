@@ -1,7 +1,15 @@
+import logging
+
 import pytest
 
 from api.client import Client
+from model.booking import BookingData
 from model.login_auth import UserData
+from utils.logging import setup
+
+logger = logging.getLogger()
+setup()
+logger.setLevel("INFO")
 
 
 def pytest_addoption(parser):
@@ -43,3 +51,10 @@ def auth_client(request):
     client = Client(url=url)
     client.set_cookies(UserData(username=username, password=password))
     return client
+
+
+@pytest.fixture()
+def create_booking(auth_client):
+    data = BookingData().random()
+    res = auth_client.create_booking(data)
+    return res.json()
